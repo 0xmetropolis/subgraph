@@ -1,0 +1,9 @@
+type User @entity {
+  id: ID! # address
+  pods: [Pod!]
+}
+
+type Pod @entity {
+  id: ID! # Pod ID
+  safe: Bytes! # address
+}
