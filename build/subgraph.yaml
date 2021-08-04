@@ -16,7 +16,7 @@ dataSources:
         - TransferSingle
       abis:
         - name: MemberToken
-          file: MemberToken/abis/MemberToken.json
+          file: MemberToken/node_modules/@orcaprotocol/contracts/artifacts/contracts/MemberToken.sol/MemberToken.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -35,7 +35,7 @@ dataSources:
         - CreateSafe
       abis:
         - name: SafeTeller
-          file: SafeTeller/abis/SafeTeller.json
+          file: SafeTeller/node_modules/@orcaprotocol/contracts/artifacts/contracts/SafeTeller.sol/SafeTeller.json
       eventHandlers:
         - event: CreateSafe(indexed uint256,address)
           handler: handleCreateSafe

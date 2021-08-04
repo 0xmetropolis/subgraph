@@ -22,7 +22,7 @@ dataSources:
         # - URI
       abis:
         - name: MemberToken
-          file: ./abis/MemberToken.json
+          file: ./node_modules/@orcaprotocol/contracts/artifacts/contracts/MemberToken.sol/MemberToken.json
       eventHandlers:
         # - event: ApprovalForAll(indexed address,indexed address,bool)
         #   handler: handleApprovalForAll
@@ -55,7 +55,7 @@ dataSources:
         # - UpdateAction
       abis:
         - name: SafeTeller
-          file: ./abis/SafeTeller.json
+          file: ./node_modules/@orcaprotocol/contracts/artifacts/contracts/SafeTeller.sol/SafeTeller.json
       eventHandlers:
         # - event: ActionExecuted(bool,bytes)
         #   handler: handleActionExecuted
