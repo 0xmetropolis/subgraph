@@ -36,60 +36,24 @@ export class ApprovalForAll__Params {
   }
 }
 
-export class ControllerRegister extends ethereum.Event {
-  get params(): ControllerRegister__Params {
-    return new ControllerRegister__Params(this);
+export class MigrateMemberController extends ethereum.Event {
+  get params(): MigrateMemberController__Params {
+    return new MigrateMemberController__Params(this);
   }
 }
 
-export class ControllerRegister__Params {
-  _event: ControllerRegister;
+export class MigrateMemberController__Params {
+  _event: MigrateMemberController;
 
-  constructor(event: ControllerRegister) {
+  constructor(event: MigrateMemberController) {
     this._event = event;
+  }
+
+  get podId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get newController(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-}
-
-export class ControllerRemove extends ethereum.Event {
-  get params(): ControllerRemove__Params {
-    return new ControllerRemove__Params(this);
-  }
-}
-
-export class ControllerRemove__Params {
-  _event: ControllerRemove;
-
-  constructor(event: ControllerRemove) {
-    this._event = event;
-  }
-
-  get newController(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-}
-
-export class OwnershipTransferred extends ethereum.Event {
-  get params(): OwnershipTransferred__Params {
-    return new OwnershipTransferred__Params(this);
-  }
-}
-
-export class OwnershipTransferred__Params {
-  _event: OwnershipTransferred;
-
-  constructor(event: OwnershipTransferred) {
-    this._event = event;
-  }
-
-  get previousOwner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get newOwner(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 }
@@ -250,27 +214,27 @@ export class MemberToken extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigIntArray());
   }
 
-  controllerRegistry(param0: Address): boolean {
+  controllerRegistry(): Address {
     let result = super.call(
       "controllerRegistry",
-      "controllerRegistry(address):(bool)",
-      [ethereum.Value.fromAddress(param0)]
+      "controllerRegistry():(address)",
+      []
     );
 
-    return result[0].toBoolean();
+    return result[0].toAddress();
   }
 
-  try_controllerRegistry(param0: Address): ethereum.CallResult<boolean> {
+  try_controllerRegistry(): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "controllerRegistry",
-      "controllerRegistry(address):(bool)",
-      [ethereum.Value.fromAddress(param0)]
+      "controllerRegistry():(address)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   exists(id: BigInt): boolean {
@@ -340,21 +304,6 @@ export class MemberToken extends ethereum.SmartContract {
       "memberController(uint256):(address)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  owner(): Address {
-    let result = super.call("owner", "owner():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_owner(): ethereum.CallResult<Address> {
-    let result = super.tryCall("owner", "owner():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -442,6 +391,10 @@ export class ConstructorCall__Inputs {
   constructor(call: ConstructorCall) {
     this._call = call;
   }
+
+  get _controllerRegistry(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -482,6 +435,40 @@ export class BurnCall__Outputs {
   _call: BurnCall;
 
   constructor(call: BurnCall) {
+    this._call = call;
+  }
+}
+
+export class MigrateMemberControllerCall extends ethereum.Call {
+  get inputs(): MigrateMemberControllerCall__Inputs {
+    return new MigrateMemberControllerCall__Inputs(this);
+  }
+
+  get outputs(): MigrateMemberControllerCall__Outputs {
+    return new MigrateMemberControllerCall__Outputs(this);
+  }
+}
+
+export class MigrateMemberControllerCall__Inputs {
+  _call: MigrateMemberControllerCall;
+
+  constructor(call: MigrateMemberControllerCall) {
+    this._call = call;
+  }
+
+  get _podId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _newController(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class MigrateMemberControllerCall__Outputs {
+  _call: MigrateMemberControllerCall;
+
+  constructor(call: MigrateMemberControllerCall) {
     this._call = call;
   }
 }
@@ -558,92 +545,6 @@ export class MintSingleBatchCall__Outputs {
   _call: MintSingleBatchCall;
 
   constructor(call: MintSingleBatchCall) {
-    this._call = call;
-  }
-}
-
-export class RegisterControllerCall extends ethereum.Call {
-  get inputs(): RegisterControllerCall__Inputs {
-    return new RegisterControllerCall__Inputs(this);
-  }
-
-  get outputs(): RegisterControllerCall__Outputs {
-    return new RegisterControllerCall__Outputs(this);
-  }
-}
-
-export class RegisterControllerCall__Inputs {
-  _call: RegisterControllerCall;
-
-  constructor(call: RegisterControllerCall) {
-    this._call = call;
-  }
-
-  get _controller(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class RegisterControllerCall__Outputs {
-  _call: RegisterControllerCall;
-
-  constructor(call: RegisterControllerCall) {
-    this._call = call;
-  }
-}
-
-export class RemoveControllerCall extends ethereum.Call {
-  get inputs(): RemoveControllerCall__Inputs {
-    return new RemoveControllerCall__Inputs(this);
-  }
-
-  get outputs(): RemoveControllerCall__Outputs {
-    return new RemoveControllerCall__Outputs(this);
-  }
-}
-
-export class RemoveControllerCall__Inputs {
-  _call: RemoveControllerCall;
-
-  constructor(call: RemoveControllerCall) {
-    this._call = call;
-  }
-
-  get _controller(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class RemoveControllerCall__Outputs {
-  _call: RemoveControllerCall;
-
-  constructor(call: RemoveControllerCall) {
-    this._call = call;
-  }
-}
-
-export class RenounceOwnershipCall extends ethereum.Call {
-  get inputs(): RenounceOwnershipCall__Inputs {
-    return new RenounceOwnershipCall__Inputs(this);
-  }
-
-  get outputs(): RenounceOwnershipCall__Outputs {
-    return new RenounceOwnershipCall__Outputs(this);
-  }
-}
-
-export class RenounceOwnershipCall__Inputs {
-  _call: RenounceOwnershipCall;
-
-  constructor(call: RenounceOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class RenounceOwnershipCall__Outputs {
-  _call: RenounceOwnershipCall;
-
-  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
@@ -770,36 +671,6 @@ export class SetApprovalForAllCall__Outputs {
   _call: SetApprovalForAllCall;
 
   constructor(call: SetApprovalForAllCall) {
-    this._call = call;
-  }
-}
-
-export class TransferOwnershipCall extends ethereum.Call {
-  get inputs(): TransferOwnershipCall__Inputs {
-    return new TransferOwnershipCall__Inputs(this);
-  }
-
-  get outputs(): TransferOwnershipCall__Outputs {
-    return new TransferOwnershipCall__Outputs(this);
-  }
-}
-
-export class TransferOwnershipCall__Inputs {
-  _call: TransferOwnershipCall;
-
-  constructor(call: TransferOwnershipCall) {
-    this._call = call;
-  }
-
-  get newOwner(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class TransferOwnershipCall__Outputs {
-  _call: TransferOwnershipCall;
-
-  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 }

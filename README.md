@@ -6,6 +6,8 @@ Subgraph for Orca Protocol contracts
 
 Run `npm install`. Run `npm install -g @graphprotocol/graph-cli` if you don't have that.
 
+When you first startup, you'll need to run `npm run codegen` and `npm run build` to generate all necessary files.
+
 When you make changes, you can run `npm run build` to check if the subgraph builds properly.
 
 ## Deploy
@@ -16,6 +18,6 @@ Check https://thegraph.com/studio/subgraph/orca-1/ for its status.
 
 ## Testing
 
-I think you need to run this: https://github.com/LimeChain/matchstick#macos-
+Run this command: https://github.com/LimeChain/matchstick#macos-
 
-TODO: Need to test this on a fresh machine
+After you do so, you can run `npm run test`, which will build and run tests.

@@ -98,4 +98,62 @@ export class Pod extends Entity {
   set safe(value: Bytes) {
     this.set("safe", Value.fromBytes(value));
   }
+
+  get users(): Array<string | null> {
+    let value = this.get("users");
+    return value.toStringArray();
+  }
+
+  set users(value: Array<string | null>) {
+    this.set("users", Value.fromStringArray(value));
+  }
+}
+
+export class PodUser extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PodUser entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PodUser entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PodUser", id.toString(), this);
+  }
+
+  static load(id: string): PodUser | null {
+    return store.get("PodUser", id) as PodUser | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get user(): string {
+    let value = this.get("user");
+    return value.toString();
+  }
+
+  set user(value: string) {
+    this.set("user", Value.fromString(value));
+  }
+
+  get pod(): string {
+    let value = this.get("pod");
+    return value.toString();
+  }
+
+  set pod(value: string) {
+    this.set("pod", Value.fromString(value));
+  }
 }

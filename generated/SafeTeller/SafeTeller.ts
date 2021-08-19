@@ -10,28 +10,6 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class ActionExecuted extends ethereum.Event {
-  get params(): ActionExecuted__Params {
-    return new ActionExecuted__Params(this);
-  }
-}
-
-export class ActionExecuted__Params {
-  _event: ActionExecuted;
-
-  constructor(event: ActionExecuted) {
-    this._event = event;
-  }
-
-  get success(): boolean {
-    return this._event.parameters[0].value.toBoolean();
-  }
-
-  get result(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-}
-
 export class CreateSafe extends ethereum.Event {
   get params(): CreateSafe__Params {
     return new CreateSafe__Params(this);
@@ -54,39 +32,108 @@ export class CreateSafe__Params {
   }
 }
 
-export class UpdateAction extends ethereum.Event {
-  get params(): UpdateAction__Params {
-    return new UpdateAction__Params(this);
-  }
-}
-
-export class UpdateAction__Params {
-  _event: UpdateAction;
-
-  constructor(event: UpdateAction) {
-    this._event = event;
-  }
-
-  get _podId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get _to(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get _value(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get _data(): Bytes {
-    return this._event.parameters[3].value.toBytes();
-  }
-}
-
 export class SafeTeller extends ethereum.SmartContract {
   static bind(address: Address): SafeTeller {
     return new SafeTeller("SafeTeller", address);
+  }
+
+  FUNCTION_SIG_ENABLE(): string {
+    let result = super.call(
+      "FUNCTION_SIG_ENABLE",
+      "FUNCTION_SIG_ENABLE():(string)",
+      []
+    );
+
+    return result[0].toString();
+  }
+
+  try_FUNCTION_SIG_ENABLE(): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "FUNCTION_SIG_ENABLE",
+      "FUNCTION_SIG_ENABLE():(string)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  FUNCTION_SIG_EXEC(): string {
+    let result = super.call(
+      "FUNCTION_SIG_EXEC",
+      "FUNCTION_SIG_EXEC():(string)",
+      []
+    );
+
+    return result[0].toString();
+  }
+
+  try_FUNCTION_SIG_EXEC(): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "FUNCTION_SIG_EXEC",
+      "FUNCTION_SIG_EXEC():(string)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  FUNCTION_SIG_SETUP(): string {
+    let result = super.call(
+      "FUNCTION_SIG_SETUP",
+      "FUNCTION_SIG_SETUP():(string)",
+      []
+    );
+
+    return result[0].toString();
+  }
+
+  try_FUNCTION_SIG_SETUP(): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "FUNCTION_SIG_SETUP",
+      "FUNCTION_SIG_SETUP():(string)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  context(): Address {
+    let result = super.call("context", "context():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_context(): ethereum.CallResult<Address> {
+    let result = super.tryCall("context", "context():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  controller(): Address {
+    let result = super.call("controller", "controller():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_controller(): ethereum.CallResult<Address> {
+    let result = super.tryCall("controller", "controller():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   createSafe(
@@ -126,98 +173,6 @@ export class SafeTeller extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  functionSigCreateProxy(): string {
-    let result = super.call(
-      "functionSigCreateProxy",
-      "functionSigCreateProxy():(string)",
-      []
-    );
-
-    return result[0].toString();
-  }
-
-  try_functionSigCreateProxy(): ethereum.CallResult<string> {
-    let result = super.tryCall(
-      "functionSigCreateProxy",
-      "functionSigCreateProxy():(string)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  functionSigEnableModule(): string {
-    let result = super.call(
-      "functionSigEnableModule",
-      "functionSigEnableModule():(string)",
-      []
-    );
-
-    return result[0].toString();
-  }
-
-  try_functionSigEnableModule(): ethereum.CallResult<string> {
-    let result = super.tryCall(
-      "functionSigEnableModule",
-      "functionSigEnableModule():(string)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  functionSigExecTransaction(): string {
-    let result = super.call(
-      "functionSigExecTransaction",
-      "functionSigExecTransaction():(string)",
-      []
-    );
-
-    return result[0].toString();
-  }
-
-  try_functionSigExecTransaction(): ethereum.CallResult<string> {
-    let result = super.tryCall(
-      "functionSigExecTransaction",
-      "functionSigExecTransaction():(string)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  functionSigSetup(): string {
-    let result = super.call(
-      "functionSigSetup",
-      "functionSigSetup():(string)",
-      []
-    );
-
-    return result[0].toString();
-  }
-
-  try_functionSigSetup(): ethereum.CallResult<string> {
-    let result = super.tryCall(
-      "functionSigSetup",
-      "functionSigSetup():(string)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
   }
 
   gnosisMasterAddress(): Address {
@@ -282,6 +237,14 @@ export class ConstructorCall__Inputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
+  }
+
+  get _proxyFactoryAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _gnosisMasterAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 
@@ -395,6 +358,40 @@ export class EnableModuleCall__Outputs {
   }
 }
 
+export class MigrateSafeTellerCall extends ethereum.Call {
+  get inputs(): MigrateSafeTellerCall__Inputs {
+    return new MigrateSafeTellerCall__Inputs(this);
+  }
+
+  get outputs(): MigrateSafeTellerCall__Outputs {
+    return new MigrateSafeTellerCall__Outputs(this);
+  }
+}
+
+export class MigrateSafeTellerCall__Inputs {
+  _call: MigrateSafeTellerCall;
+
+  constructor(call: MigrateSafeTellerCall) {
+    this._call = call;
+  }
+
+  get safe(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _newSafeTeller(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class MigrateSafeTellerCall__Outputs {
+  _call: MigrateSafeTellerCall;
+
+  constructor(call: MigrateSafeTellerCall) {
+    this._call = call;
+  }
+}
+
 export class OnBurnCall extends ethereum.Call {
   get inputs(): OnBurnCall__Inputs {
     return new OnBurnCall__Inputs(this);
@@ -480,20 +477,16 @@ export class OnTransferCall__Inputs {
     this._call = call;
   }
 
-  get operator(): Address {
+  get from(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get from(): Address {
+  get to(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get to(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
   get safe(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 }
 
@@ -531,40 +524,6 @@ export class UpdateControllerCall__Outputs {
   _call: UpdateControllerCall;
 
   constructor(call: UpdateControllerCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateSafeAddressesCall extends ethereum.Call {
-  get inputs(): UpdateSafeAddressesCall__Inputs {
-    return new UpdateSafeAddressesCall__Inputs(this);
-  }
-
-  get outputs(): UpdateSafeAddressesCall__Outputs {
-    return new UpdateSafeAddressesCall__Outputs(this);
-  }
-}
-
-export class UpdateSafeAddressesCall__Inputs {
-  _call: UpdateSafeAddressesCall;
-
-  constructor(call: UpdateSafeAddressesCall) {
-    this._call = call;
-  }
-
-  get _proxyFactoryAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _gnosisMasterAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class UpdateSafeAddressesCall__Outputs {
-  _call: UpdateSafeAddressesCall;
-
-  constructor(call: UpdateSafeAddressesCall) {
     this._call = call;
   }
 }
