@@ -5,7 +5,6 @@ import { log } from "matchstick-as/assembly/log";
 import { User, PodUser } from "../generated/schema";
 import { addressZero, addressOne, addressTwo } from "./fixtures";
 
-
 export function runTests(): void {
   test("CreateSafe should create a Pod entity", () => {
     let createSafeEvent = generateCreateSafe(1, addressOne);
@@ -13,8 +12,6 @@ export function runTests(): void {
 
     assert.fieldEquals('Pod', '1', 'safe', addressOne);
     clearStore();
-    // Bug fix for matchstick
-    createSafeEvent.parameters.splice(0, 100);
   });
 
   test('TransferSingle should create a User and UserPod entity', () => {
@@ -32,7 +29,6 @@ export function runTests(): void {
     assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'pod', '1');
     clearStore();
-    transferSingleEvent.parameters.splice(0, 100);
   });
 
   test('TransferSingle should remove the existing UserPod entity', () => {
@@ -56,6 +52,39 @@ export function runTests(): void {
     // Not working for some reason?
     // assert.notInStore('UserPod', addressOne + '-1');
     clearStore();
-    transferSingle.parameters.splice(0, 100);
+  });
+
+  test('A user should be show up in multiple pods', () => {
+    let createSafeEvent = generateCreateSafe(1, addressOne);
+    handleCreateSafe(createSafeEvent);
+
+    let createSafeEvent2 = generateCreateSafe(2, addressOne);
+    handleCreateSafe(createSafeEvent2);
+
+    let transferSingleEvent = generateTransferSingle(
+      addressOne,
+      addressZero,
+      addressOne,
+      1,
+      1,
+    );
+    handleTransferSingle(transferSingleEvent);
+
+    let transferSingleEvent2 = generateTransferSingle(
+      addressOne,
+      addressZero,
+      addressOne,
+      2,
+      1,
+    );
+    handleTransferSingle(transferSingleEvent2);
+
+    assert.fieldEquals('Pod', '1', 'safe', addressOne);
+    assert.fieldEquals('Pod', '2', 'safe', addressOne);
+    assert.fieldEquals('User', addressOne, 'id', addressOne);
+    assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
+    assert.fieldEquals('PodUser', addressOne + '-2', 'user', addressOne);
+
+    clearStore();
   });
 }
