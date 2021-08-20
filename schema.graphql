@@ -1,9 +1,16 @@
 type User @entity {
   id: ID! # address
-  pods: [Pod!]
+  pods: [PodUser!] @derivedFrom(field: "user")
 }
 
 type Pod @entity {
   id: ID! # Pod ID
   safe: Bytes! # address
+  users: [PodUser]! @derivedFrom(field: "pod")
+}
+
+type PodUser @entity {
+  id: ID! # Set to `${user.id}-${pod.id}
+  user: User!
+  pod: Pod!
 }
