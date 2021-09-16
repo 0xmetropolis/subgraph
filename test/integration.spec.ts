@@ -49,8 +49,28 @@ export function runTests(): void {
     handleTransferSingle(transferSingle);
     assert.fieldEquals('PodUser', addressTwo + '-1', 'user', addressTwo);
     assert.fieldEquals('PodUser', addressTwo + '-1', 'pod', '1');
-    // Not working for some reason?
-    // assert.notInStore('UserPod', addressOne + '-1');
+    assert.notInStore('PodUser', addressOne + '-1');
+    clearStore();
+  });
+
+  test('TransferSingle should not create any entities for addressZero', () => {
+    let fromUser = new User(addressOne);
+    fromUser.save();
+    let userPod = new PodUser(addressOne + '-1');
+    userPod.save();
+  
+    // Burn a token, i.e., transfer to addressZero
+    let transferSingle = generateTransferSingle(
+      addressOne,
+      addressOne,
+      addressZero,
+      1,
+      1,
+    );
+
+    handleTransferSingle(transferSingle);
+    assert.notInStore('PodUser', addressZero + '-1');
+    assert.notInStore('User', addressZero);
     clearStore();
   });
 
