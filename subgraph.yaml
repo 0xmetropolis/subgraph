@@ -6,7 +6,7 @@ dataSources:
     name: MemberToken
     network: rinkeby
     source:
-      address: "0x016213Bb6bdcb5E57cA4B1D4612f12D7e114e264"
+      address: "0x0C1b610F29EC2143B4A7dCcE7730cb1E43d3C0a5"
       abi: MemberToken
     mapping:
       kind: ethereum/events
@@ -43,7 +43,7 @@ dataSources:
     name: SafeTeller
     network: rinkeby
     source:
-      address: "0x01A7142323Aa54410Df5A92520bd976641Ca252f"
+      address: "0x31a669ff402DC3DB4420d0C6A02Fe102F054818A"
       abi: SafeTeller
     mapping:
       kind: ethereum/events
