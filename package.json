@@ -13,7 +13,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "0.21.1",
     "@graphprotocol/graph-ts": "0.20.0",
-    "@orcaprotocol/contracts": "^1.3.4"
+    "@orcaprotocol/contracts": "^4.0.0"
   },
   "devDependencies": {
     "matchstick-as": "0.0.50"

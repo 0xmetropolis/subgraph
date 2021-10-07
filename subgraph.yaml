@@ -6,9 +6,9 @@ dataSources:
     name: MemberToken
     network: rinkeby
     source:
-      address: "0x7f21F7150913154fd40ba10499c0b9c0F7315C1e"
+      address: "0xf11a8D9D3FeEdEAFd8857Acdd39728a48a5D9610"
       abi: MemberToken
-      startBlock: 9183184
+      startBlock: 9424396
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -23,7 +23,7 @@ dataSources:
         # - URI
       abis:
         - name: MemberToken
-          file: ./node_modules/@orcaprotocol/contracts/artifacts/contracts/MemberToken.sol/MemberToken.json
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/MemberToken.json
       eventHandlers:
         # - event: ApprovalForAll(indexed address,indexed address,bool)
         #   handler: handleApprovalForAll
@@ -41,28 +41,24 @@ dataSources:
         #   handler: handleURI
       file: ./src/mapping.ts
   - kind: ethereum/contract
-    name: SafeTeller
+    name: Controller
     network: rinkeby
     source:
-      address: "0x1023cd01f90c388A2A66E631993b7b988AE742cA"
-      abi: SafeTeller
-      startBlock: 9183185
+      address: "0x8532CeC262110baB9CE79429eac92F5f7334B54f"
+      abi: Controller
+      startBlock: 9424397
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        # - ActionExecuted
-        - CreateSafe
-        # - UpdateAction
+        - UpdatePodAdmin
       abis:
-        - name: SafeTeller
-          file: ./node_modules/@orcaprotocol/contracts/artifacts/contracts/SafeTeller.sol/SafeTeller.json
+        - name: Controller
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/Controller.json
       eventHandlers:
-        # - event: ActionExecuted(bool,bytes)
-        #   handler: handleActionExecuted
-        - event: CreateSafe(indexed uint256,address)
-          handler: handleCreateSafe
-        # - event: UpdateAction(uint256,address,uint256,bytes)
-        #   handler: handleUpdateAction
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdmin
+        - event: CreatePod(uint256,address,address)
+          handler: handleCreatePod
       file: ./src/mapping.ts

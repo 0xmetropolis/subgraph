@@ -2,8 +2,9 @@ import { ethereum, Address } from '@graphprotocol/graph-ts';
 import { clearStore, test, assert, newMockEvent } from "matchstick-as/assembly/index";
 import { TransferSingle } from '../generated/MemberToken/MemberToken';
 import { 
-  CreateSafe,
-} from '../generated/SafeTeller/SafeTeller';
+  CreatePod,
+  UpdatePodAdmin,
+} from '../generated/Controller/Controller';
 
 // Generates events for test purposes
 
@@ -19,13 +20,14 @@ function I32Param(input: i32): ethereum.EventParam {
   return param;
 }
 
-export function generateCreateSafe(id: i32, safeAddress: string): CreateSafe {
-  let CreateSafeEvent = new CreateSafe();
+export function generateCreatePod(id: i32, safeAddress: string, admin: string): CreatePod {
+  let CreatePodEvent = new CreatePod();
 
-  CreateSafeEvent.parameters.push(I32Param(id));
-  CreateSafeEvent.parameters.push(AddressParam(safeAddress));
+  CreatePodEvent.parameters.push(I32Param(id));
+  CreatePodEvent.parameters.push(AddressParam(safeAddress));
+  CreatePodEvent.parameters.push(AddressParam(admin));
 
-  return newMockEvent(CreateSafeEvent) as CreateSafe;
+  return newMockEvent(CreatePodEvent) as CreatePod;
 }
 
 export function generateTransferSingle(operator: string, from: string, to: string, id: i32, value: i32): TransferSingle {
@@ -38,4 +40,13 @@ export function generateTransferSingle(operator: string, from: string, to: strin
   TransferSingleEvent.parameters.push(I32Param(value));
 
   return newMockEvent(TransferSingleEvent) as TransferSingle;
+}
+
+export function generateUpdatePodAdmin(podId: i32, admin: string): UpdatePodAdmin {
+  let UpdatePodAdminEvent = new UpdatePodAdmin();
+
+  UpdatePodAdminEvent.parameters.push(I32Param(podId));
+  UpdatePodAdminEvent.parameters.push(AddressParam(admin));
+
+  return newMockEvent(UpdatePodAdminEvent) as UpdatePodAdmin;
 }
