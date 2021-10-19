@@ -1,16 +1,30 @@
 import { clearStore, test, assert } from "matchstick-as/assembly/index";
-import { handleCreateSafe, handleTransferSingle } from "../src/mapping";
-import { generateCreateSafe, generateTransferSingle } from "./eventGenerators";
+import { handleCreatePod, handleTransferSingle, handleUpdatePodAdmin } from "../src/mapping";
+import { generateCreatePod, generateTransferSingle, generateUpdatePodAdmin } from "./eventGenerators";
 import { log } from "matchstick-as/assembly/log";
 import { User, PodUser } from "../generated/schema";
 import { addressZero, addressOne, addressTwo } from "./fixtures";
 
 export function runTests(): void {
   test("CreateSafe should create a Pod entity", () => {
-    let createSafeEvent = generateCreateSafe(1, addressOne);
-    handleCreateSafe(createSafeEvent);
+    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo);
+    handleCreatePod(createSafeEvent);
 
     assert.fieldEquals('Pod', '1', 'safe', addressOne);
+    assert.fieldEquals('Pod', '1', 'admin', addressTwo);
+    clearStore();
+  });
+
+  // Both CreateSafe and UpdatePodAdmin get fired from a createSafe call
+  // Ensure that the entity at the end is correct.
+  test("CreateSafe and UpdatePodAdmin should interact together correctly", () => {
+    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo);
+    handleCreatePod(createSafeEvent);
+    let updatePodAdminEvent = generateUpdatePodAdmin(1, addressTwo);
+    handleUpdatePodAdmin(updatePodAdminEvent);
+
+    assert.fieldEquals('Pod', '1', 'safe', addressOne);
+    assert.fieldEquals('Pod', '1', 'admin', addressTwo);
     clearStore();
   });
 
@@ -75,11 +89,11 @@ export function runTests(): void {
   });
 
   test('A user should be show up in multiple pods', () => {
-    let createSafeEvent = generateCreateSafe(1, addressOne);
-    handleCreateSafe(createSafeEvent);
+    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo);
+    handleCreatePod(createSafeEvent);
 
-    let createSafeEvent2 = generateCreateSafe(2, addressOne);
-    handleCreateSafe(createSafeEvent2);
+    let createSafeEvent2 = generateCreatePod(2, addressOne, addressTwo);
+    handleCreatePod(createSafeEvent2);
 
     let transferSingleEvent = generateTransferSingle(
       addressOne,
