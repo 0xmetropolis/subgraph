@@ -12,9 +12,14 @@ When you make changes, you can run `npm run build` to check if the subgraph buil
 
 ## Deploy
 
-Run `graph deploy --studio orca-1` to deploy that compiled subgraph to our hosted service
+This subgraph is configured to deploy to both mainnet and rinkeby.
 
-Check https://thegraph.com/studio/subgraph/orca-1/ for its status.
+Steps:
+
+1. Update `@orcaprotocol/contracts` via npm.
+1. Run `npm run deploy-rinkeby`, which will automatically update the subgraph.yaml with the new info from the package, and then deploy the subgraph.
+
+If you only want to update the config file, you can run `npm run prepare-rinkeby`.
 
 ## Testing
 

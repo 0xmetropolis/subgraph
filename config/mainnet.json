@@ -1,0 +1,11 @@
+{
+    "network": "mainnet",
+    "memberToken": {
+        "address": "0xf11a8D9D3FeEdEAFd8857Acdd39728a48a5D9610",
+        "startBlock": 9424396
+    },
+    "controller": {
+        "address": "0xf11a8D9D3FeEdEAFd8857Acdd39728a48a5D9610",
+        "startBlock": 9424397
+    }
+}
