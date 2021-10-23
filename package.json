@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "prepare:rinkeby": "./scripts/updateRinkeby.sh; mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:rinkeby": "./scripts/update-rinkeby.sh; mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
     "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-1",
     "test": "npm run build && ./matchstick MemberToken",
