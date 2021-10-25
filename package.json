@@ -1,16 +1,16 @@
 {
-  "name": "orca-1",
+  "name": "@orcaprotocol/subgraph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "prepare-rinkeby": "./scripts/updateRinkeby.sh; mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
-    "prepare-mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
-    "deploy-rinkeby": "npm run prepare-rinkeby; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-1",
+    "prepare:rinkeby": "./scripts/update-rinkeby.sh; mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-1",
     "test": "npm run build && ./matchstick MemberToken",
-    "create-local": "graph create --node http://localhost:8020/ orca-1",
-    "remove-local": "graph remove --node http://localhost:8020/ orca-1",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 orca-1"
+    "create:local": "graph create --node http://localhost:8020/ orca-1",
+    "remove:local": "graph remove --node http://localhost:8020/ orca-1",
+    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 orca-1"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.21.1",

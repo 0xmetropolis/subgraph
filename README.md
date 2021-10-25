@@ -17,9 +17,9 @@ This subgraph is configured to deploy to both mainnet and rinkeby.
 Steps:
 
 1. Update `@orcaprotocol/contracts` via npm.
-1. Run `npm run deploy-rinkeby`, which will automatically update the subgraph.yaml with the new info from the package, and then deploy the subgraph.
+1. Run `npm run deploy:rinkeby`, which will automatically update the subgraph.yaml with the new info from the package, and then deploy the subgraph.
 
-If you only want to update the config file, you can run `npm run prepare-rinkeby`.
+If you only want to update the config file, you can run `npm run prepare:rinkeby`.
 
 ## Testing
 
