@@ -1,11 +1,11 @@
 {
-    "network": "mainnet",
-    "memberToken": {
-        "address": "0xf11a8D9D3FeEdEAFd8857Acdd39728a48a5D9610",
-        "startBlock": 9424396
-    },
-    "controller": {
-        "address": "0xf11a8D9D3FeEdEAFd8857Acdd39728a48a5D9610",
-        "startBlock": 9424397
-    }
+  "network": "mainnet",
+  "memberToken": {
+    "address": "0x6b028EB9f2D83DFCBa66d17C17BaE2765dFd857D",
+    "startBlock": "13493083"
+  },
+  "controller": {
+    "address": "0x440ADb68E3d1df8491519d10728957F249bdCe7D",
+    "startBlock": "13493184"
+  }
 }
