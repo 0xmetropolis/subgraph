@@ -24,7 +24,7 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: Controller
-    network: rinkeby
+    network: {{network}}
     source:
       address: "{{controller.address}}"
       abi: Controller
