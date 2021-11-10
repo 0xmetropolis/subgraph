@@ -7,18 +7,19 @@ import { addressZero, addressOne, addressTwo } from "./fixtures";
 
 export function runTests(): void {
   test("CreateSafe should create a Pod entity", () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo);
+    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
     handleCreatePod(createSafeEvent);
 
     assert.fieldEquals('Pod', '1', 'safe', addressOne);
     assert.fieldEquals('Pod', '1', 'admin', addressTwo);
+    assert.fieldEquals('Pod', '1', 'ensName', 'test.pod.xyz');
     clearStore();
   });
 
   // Both CreateSafe and UpdatePodAdmin get fired from a createSafe call
   // Ensure that the entity at the end is correct.
   test("CreateSafe and UpdatePodAdmin should interact together correctly", () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo);
+    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
     handleCreatePod(createSafeEvent);
     let updatePodAdminEvent = generateUpdatePodAdmin(1, addressTwo);
     handleUpdatePodAdmin(updatePodAdminEvent);
@@ -89,10 +90,10 @@ export function runTests(): void {
   });
 
   test('A user should be show up in multiple pods', () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo);
+    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
     handleCreatePod(createSafeEvent);
 
-    let createSafeEvent2 = generateCreatePod(2, addressOne, addressTwo);
+    let createSafeEvent2 = generateCreatePod(2, addressOne, addressTwo, 'test-01.pod.xyz');
     handleCreatePod(createSafeEvent2);
 
     let transferSingleEvent = generateTransferSingle(

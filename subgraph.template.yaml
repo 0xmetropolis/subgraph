@@ -41,6 +41,6 @@ dataSources:
       eventHandlers:
         - event: UpdatePodAdmin(uint256,address)
           handler: handleUpdatePodAdmin
-        - event: CreatePod(uint256,address,address)
+        - event: CreatePod(uint256,address,address,string)
           handler: handleCreatePod
       file: ./src/mapping.ts

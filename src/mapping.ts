@@ -10,6 +10,7 @@ import { store } from "@graphprotocol/graph-ts";
 import { addressZero } from "../test/fixtures";
 
 // These next two lines need to be commented out if you're deploying the subgraph
+// and uncommented if you're testing.
 // import { log } from "matchstick-as/assembly/log";
 // export { runTests } from "../test/integration.spec";
 
@@ -42,10 +43,12 @@ export function handleCreatePod(event: CreatePod): void {
   let podId = event.params.podId.toString();
   let safeAddress = event.params.safe;
   let admin = event.params.admin;
+  let ensName = event.params.ensName;
 
   let pod = new Pod(podId);
   pod.safe = safeAddress;
   pod.admin = admin;
+  pod.ensName = ensName;
   pod.save()
 }
 

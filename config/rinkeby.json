@@ -1,11 +1,11 @@
 {
   "network": "rinkeby",
   "memberToken": {
-    "address": "0x153c6c34F6c3CAc9b51F65Ba0D07EE61182492f8",
-    "startBlock": "9511439"
+    "address": "0x8DC995523c9c1C6180c50d0CE0733621E63ef8E1",
+    "startBlock": "9619574"
   },
   "controller": {
-    "address": "0x96F983d0B84ecFf01C34991C3718Ad35d520A825",
-    "startBlock": "9511440"
+    "address": "0xe804300793bb60F71242A5dE7eca7Cbb844Ae3BA",
+    "startBlock": "9619575"
   }
 }
