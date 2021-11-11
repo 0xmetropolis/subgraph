@@ -6,7 +6,7 @@ Subgraph for Orca Protocol contracts
 
 Run `npm install`. Run `npm install -g @graphprotocol/graph-cli` if you don't have that.
 
-When you first startup, you'll need to run `npm run codegen` and `npm run build` to generate all necessary files.
+When you first startup, or when we update the contracts, you'll need to run `npm run codegen` and `npm run build` to generate all necessary files.
 
 When you make changes, you can run `npm run build` to check if the subgraph builds properly.
 

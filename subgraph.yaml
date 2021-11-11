@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MemberToken
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x6b028EB9f2D83DFCBa66d17C17BaE2765dFd857D"
+      address: "0x8DC995523c9c1C6180c50d0CE0733621E63ef8E1"
       abi: MemberToken
-      startBlock: 13493083
+      startBlock: 9619574
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -24,11 +24,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: Controller
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x440ADb68E3d1df8491519d10728957F249bdCe7D"
+      address: "0xe804300793bb60F71242A5dE7eca7Cbb844Ae3BA"
       abi: Controller
-      startBlock: 13493184
+      startBlock: 9619575
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -41,6 +41,6 @@ dataSources:
       eventHandlers:
         - event: UpdatePodAdmin(uint256,address)
           handler: handleUpdatePodAdmin
-        - event: CreatePod(uint256,address,address)
+        - event: CreatePod(uint256,address,address,string)
           handler: handleCreatePod
       file: ./src/mapping.ts

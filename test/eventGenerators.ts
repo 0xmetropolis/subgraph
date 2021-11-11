@@ -20,12 +20,19 @@ function I32Param(input: i32): ethereum.EventParam {
   return param;
 }
 
-export function generateCreatePod(id: i32, safeAddress: string, admin: string): CreatePod {
+function StringParam(input: string): ethereum.EventParam {
+  let param = new ethereum.EventParam();
+  param.value = ethereum.Value.fromString(input);
+  return param;
+}
+
+export function generateCreatePod(id: i32, safeAddress: string, admin: string, ensName: string): CreatePod {
   let CreatePodEvent = new CreatePod();
 
   CreatePodEvent.parameters.push(I32Param(id));
   CreatePodEvent.parameters.push(AddressParam(safeAddress));
   CreatePodEvent.parameters.push(AddressParam(admin));
+  CreatePodEvent.parameters.push(StringParam(ensName));
 
   return newMockEvent(CreatePodEvent) as CreatePod;
 }
