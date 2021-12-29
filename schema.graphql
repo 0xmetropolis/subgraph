@@ -5,9 +5,7 @@ type User @entity {
 
 type Pod @entity {
   id: ID! # Pod ID
-  ensName: String!
-  safe: Bytes! # address
-  admin: Bytes! # address
+  controller: Bytes! # address
   users: [PodUser]! @derivedFrom(field: "pod")
 }
 

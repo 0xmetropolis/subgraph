@@ -1,33 +1,31 @@
 import { clearStore, test, assert } from "matchstick-as/assembly/index";
-import { handleCreatePod, handleTransferSingle, handleUpdatePodAdmin } from "../src/mapping";
-import { generateCreatePod, generateTransferSingle, generateUpdatePodAdmin } from "./eventGenerators";
+import { handleCreatePod, handleMigrateMemberController, handleTransferSingle } from "../src/mapping";
+import { generateCreatePod, generateMigrateMemberController, generateTransferSingle, generateUpdatePodAdmin } from "./eventGenerators";
 import { log } from "matchstick-as/assembly/log";
 import { User, PodUser } from "../generated/schema";
-import { addressZero, addressOne, addressTwo } from "./fixtures";
+import { addressZero, addressOne, addressTwo, addressThree } from "./fixtures";
 
 export function runTests(): void {
   test("CreateSafe should create a Pod entity", () => {
     let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
     handleCreatePod(createSafeEvent);
 
-    assert.fieldEquals('Pod', '1', 'safe', addressOne);
-    assert.fieldEquals('Pod', '1', 'admin', addressTwo);
-    assert.fieldEquals('Pod', '1', 'ensName', 'test.pod.xyz');
+    // Honestly don't know where this field comes from, I guess the test auto-gens a contract address.
+    assert.fieldEquals('Pod', '1', 'controller', '0xa16081f360e3847006db660bae1c6d1b2e17ec2a');
     clearStore();
   });
 
-  // Both CreateSafe and UpdatePodAdmin get fired from a createSafe call
-  // Ensure that the entity at the end is correct.
-  test("CreateSafe and UpdatePodAdmin should interact together correctly", () => {
+  test("MigrateMemberController should update the controller field", () => {
     let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
     handleCreatePod(createSafeEvent);
-    let updatePodAdminEvent = generateUpdatePodAdmin(1, addressTwo);
-    handleUpdatePodAdmin(updatePodAdminEvent);
 
-    assert.fieldEquals('Pod', '1', 'safe', addressOne);
-    assert.fieldEquals('Pod', '1', 'admin', addressTwo);
+    let migrateMemberControllerEvent = generateMigrateMemberController(1, addressThree);
+    handleMigrateMemberController(migrateMemberControllerEvent);
+    // It's the same as address3, just lowercased instead of checksum.
+    // string.toLowerCase() doesn't work in assemblyscript.
+    assert.fieldEquals('Pod', '1', 'controller', '0x7f4cc354b3b106006781acdad7793b51d7f8636d');
     clearStore();
-  });
+  })
 
   test('TransferSingle should create a User and UserPod entity', () => {
     // Mint a token (transfer from zero to addressTwo)
@@ -46,7 +44,7 @@ export function runTests(): void {
     clearStore();
   });
 
-  test('TransferSingle should remove the existing UserPod entity', () => {
+  test('TransferSingle should remove the existing UserPod entity when token is transferred out', () => {
     let fromUser = new User(addressOne);
     fromUser.save();
     let userPod = new PodUser(addressOne + '-1');
@@ -114,8 +112,8 @@ export function runTests(): void {
     );
     handleTransferSingle(transferSingleEvent2);
 
-    assert.fieldEquals('Pod', '1', 'safe', addressOne);
-    assert.fieldEquals('Pod', '2', 'safe', addressOne);
+    assert.fieldEquals('Pod', '1', 'controller', '0xa16081f360e3847006db660bae1c6d1b2e17ec2a');
+    assert.fieldEquals('Pod', '2', 'controller', '0xa16081f360e3847006db660bae1c6d1b2e17ec2a');
     assert.fieldEquals('User', addressOne, 'id', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-2', 'user', addressOne);

@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x8DC995523c9c1C6180c50d0CE0733621E63ef8E1"
       abi: MemberToken
-      startBlock: 9619574
+      startBlock: 9619573
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -21,6 +21,8 @@ dataSources:
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
+        - event: MigrateMemberController(uint256,address)
+          handler: handleMigrateMemberController
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: Controller

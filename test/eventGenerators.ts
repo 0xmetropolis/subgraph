@@ -1,6 +1,6 @@
 import { ethereum, Address } from '@graphprotocol/graph-ts';
 import { clearStore, test, assert, newMockEvent } from "matchstick-as/assembly/index";
-import { TransferSingle } from '../generated/MemberToken/MemberToken';
+import { TransferSingle, MigrateMemberController } from '../generated/MemberToken/MemberToken';
 import { 
   CreatePod,
   UpdatePodAdmin,
@@ -47,6 +47,15 @@ export function generateTransferSingle(operator: string, from: string, to: strin
   TransferSingleEvent.parameters.push(I32Param(value));
 
   return newMockEvent(TransferSingleEvent) as TransferSingle;
+}
+
+export function generateMigrateMemberController(podId: i32, newController: string): MigrateMemberController {
+  let MigrateMemberControllerEvent = new MigrateMemberController();
+
+  MigrateMemberControllerEvent.parameters.push(I32Param(podId));
+  MigrateMemberControllerEvent.parameters.push(AddressParam(newController));
+
+  return newMockEvent(MigrateMemberControllerEvent) as MigrateMemberController;
 }
 
 export function generateUpdatePodAdmin(podId: i32, admin: string): UpdatePodAdmin {
