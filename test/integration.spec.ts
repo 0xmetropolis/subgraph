@@ -1,33 +1,12 @@
 import { clearStore, test, assert } from "matchstick-as/assembly/index";
-import { handleCreatePod, handleMigrateMemberController, handleTransferSingle } from "../src/mapping";
-import { generateCreatePod, generateMigrateMemberController, generateTransferSingle, generateUpdatePodAdmin } from "./eventGenerators";
+import { handleTransferSingle } from "../src/mapping";
+import { generateTransferSingle } from "./eventGenerators";
 import { log } from "matchstick-as/assembly/log";
 import { User, PodUser } from "../generated/schema";
 import { addressZero, addressOne, addressTwo, addressThree } from "./fixtures";
 
 export function runTests(): void {
-  test("CreateSafe should create a Pod entity", () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
-    handleCreatePod(createSafeEvent);
-
-    // Honestly don't know where this field comes from, I guess the test auto-gens a contract address.
-    assert.fieldEquals('Pod', '1', 'controller', '0xa16081f360e3847006db660bae1c6d1b2e17ec2a');
-    clearStore();
-  });
-
-  test("MigrateMemberController should update the controller field", () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
-    handleCreatePod(createSafeEvent);
-
-    let migrateMemberControllerEvent = generateMigrateMemberController(1, addressThree);
-    handleMigrateMemberController(migrateMemberControllerEvent);
-    // It's the same as address3, just lowercased instead of checksum.
-    // string.toLowerCase() doesn't work in assemblyscript.
-    assert.fieldEquals('Pod', '1', 'controller', '0x7f4cc354b3b106006781acdad7793b51d7f8636d');
-    clearStore();
-  })
-
-  test('TransferSingle should create a User and UserPod entity', () => {
+  test('TransferSingle should create a Pod, User, and UserPod entity', () => {
     // Mint a token (transfer from zero to addressTwo)
     let transferSingleEvent = generateTransferSingle(
       addressOne,
@@ -38,6 +17,7 @@ export function runTests(): void {
     );
 
     handleTransferSingle(transferSingleEvent);
+    assert.fieldEquals('Pod', '1', 'id', '1');
     assert.fieldEquals('User', addressOne, 'id', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'pod', '1');
@@ -88,12 +68,6 @@ export function runTests(): void {
   });
 
   test('A user should be show up in multiple pods', () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
-    handleCreatePod(createSafeEvent);
-
-    let createSafeEvent2 = generateCreatePod(2, addressOne, addressTwo, 'test-01.pod.xyz');
-    handleCreatePod(createSafeEvent2);
-
     let transferSingleEvent = generateTransferSingle(
       addressOne,
       addressZero,
@@ -112,8 +86,6 @@ export function runTests(): void {
     );
     handleTransferSingle(transferSingleEvent2);
 
-    assert.fieldEquals('Pod', '1', 'controller', '0xa16081f360e3847006db660bae1c6d1b2e17ec2a');
-    assert.fieldEquals('Pod', '2', 'controller', '0xa16081f360e3847006db660bae1c6d1b2e17ec2a');
     assert.fieldEquals('User', addressOne, 'id', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-2', 'user', addressOne);

@@ -1,10 +1,6 @@
 import {
-  MigrateMemberController,
   TransferSingle,
 } from "../generated/MemberToken/MemberToken"
-import { 
-  CreatePod,
-} from '../generated/Controller/Controller';
 import { User, Pod, PodUser } from "../generated/schema";
 import { store } from "@graphprotocol/graph-ts";
 import { addressZero } from "../test/fixtures";
@@ -18,6 +14,12 @@ export function handleTransferSingle(event: TransferSingle): void {
   let to = event.params.to.toHex();
   let from = event.params.from.toHex();
   let id = event.params.id.toString();
+
+  let pod = Pod.load(id);
+  if (pod == null) {
+    pod = new Pod(id);
+    pod.save();
+  }
 
   // Create UserPod
   if (to != addressZero) {
@@ -37,22 +39,4 @@ export function handleTransferSingle(event: TransferSingle): void {
     let toUser = new User(to);
     toUser.save();
   }
-}
-
-export function handleMigrateMemberController(event: MigrateMemberController): void {
-  let podId = event.params.podId.toString();
-  let newController = event.params.newController;
-
-  let pod = Pod.load(podId);
-  pod.controller = newController;
-  pod.save();
-}
-
-export function handleCreatePod(event: CreatePod): void {
-  let podId = event.params.podId.toString();
-
-  let pod = new Pod(podId);
-  // event.address is the address of the contract
-  pod.controller = event.address;
-  pod.save()
 }

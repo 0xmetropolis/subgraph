@@ -21,28 +21,4 @@ dataSources:
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
-        - event: MigrateMemberController(uint256,address)
-          handler: handleMigrateMemberController
-      file: ./src/mapping.ts
-  - kind: ethereum/contract
-    name: Controller
-    network: rinkeby
-    source:
-      address: "0xe804300793bb60F71242A5dE7eca7Cbb844Ae3BA"
-      abi: Controller
-      startBlock: 9619575
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - UpdatePodAdmin
-      abis:
-        - name: Controller
-          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/Controller.json
-      eventHandlers:
-        - event: UpdatePodAdmin(uint256,address)
-          handler: handleUpdatePodAdmin
-        - event: CreatePod(uint256,address,address,string)
-          handler: handleCreatePod
       file: ./src/mapping.ts
