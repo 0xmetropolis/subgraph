@@ -1,35 +1,12 @@
 import { clearStore, test, assert } from "matchstick-as/assembly/index";
-import { handleCreatePod, handleTransferSingle, handleUpdatePodAdmin } from "../src/mapping";
-import { generateCreatePod, generateTransferSingle, generateUpdatePodAdmin } from "./eventGenerators";
+import { handleTransferSingle } from "../src/mapping";
+import { generateTransferSingle } from "./eventGenerators";
 import { log } from "matchstick-as/assembly/log";
 import { User, PodUser } from "../generated/schema";
-import { addressZero, addressOne, addressTwo } from "./fixtures";
+import { addressZero, addressOne, addressTwo, addressThree } from "./fixtures";
 
 export function runTests(): void {
-  test("CreateSafe should create a Pod entity", () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
-    handleCreatePod(createSafeEvent);
-
-    assert.fieldEquals('Pod', '1', 'safe', addressOne);
-    assert.fieldEquals('Pod', '1', 'admin', addressTwo);
-    assert.fieldEquals('Pod', '1', 'ensName', 'test.pod.xyz');
-    clearStore();
-  });
-
-  // Both CreateSafe and UpdatePodAdmin get fired from a createSafe call
-  // Ensure that the entity at the end is correct.
-  test("CreateSafe and UpdatePodAdmin should interact together correctly", () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
-    handleCreatePod(createSafeEvent);
-    let updatePodAdminEvent = generateUpdatePodAdmin(1, addressTwo);
-    handleUpdatePodAdmin(updatePodAdminEvent);
-
-    assert.fieldEquals('Pod', '1', 'safe', addressOne);
-    assert.fieldEquals('Pod', '1', 'admin', addressTwo);
-    clearStore();
-  });
-
-  test('TransferSingle should create a User and UserPod entity', () => {
+  test('TransferSingle should create a Pod, User, and UserPod entity', () => {
     // Mint a token (transfer from zero to addressTwo)
     let transferSingleEvent = generateTransferSingle(
       addressOne,
@@ -40,13 +17,14 @@ export function runTests(): void {
     );
 
     handleTransferSingle(transferSingleEvent);
+    assert.fieldEquals('Pod', '1', 'id', '1');
     assert.fieldEquals('User', addressOne, 'id', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'pod', '1');
     clearStore();
   });
 
-  test('TransferSingle should remove the existing UserPod entity', () => {
+  test('TransferSingle should remove the existing UserPod entity when token is transferred out', () => {
     let fromUser = new User(addressOne);
     fromUser.save();
     let userPod = new PodUser(addressOne + '-1');
@@ -90,12 +68,6 @@ export function runTests(): void {
   });
 
   test('A user should be show up in multiple pods', () => {
-    let createSafeEvent = generateCreatePod(1, addressOne, addressTwo, 'test.pod.xyz');
-    handleCreatePod(createSafeEvent);
-
-    let createSafeEvent2 = generateCreatePod(2, addressOne, addressTwo, 'test-01.pod.xyz');
-    handleCreatePod(createSafeEvent2);
-
     let transferSingleEvent = generateTransferSingle(
       addressOne,
       addressZero,
@@ -114,8 +86,6 @@ export function runTests(): void {
     );
     handleTransferSingle(transferSingleEvent2);
 
-    assert.fieldEquals('Pod', '1', 'safe', addressOne);
-    assert.fieldEquals('Pod', '2', 'safe', addressOne);
     assert.fieldEquals('User', addressOne, 'id', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-1', 'user', addressOne);
     assert.fieldEquals('PodUser', addressOne + '-2', 'user', addressOne);

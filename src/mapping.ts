@@ -1,10 +1,6 @@
 import {
   TransferSingle,
 } from "../generated/MemberToken/MemberToken"
-import { 
-  CreatePod,
-  UpdatePodAdmin,
-} from '../generated/Controller/Controller';
 import { User, Pod, PodUser } from "../generated/schema";
 import { store } from "@graphprotocol/graph-ts";
 import { addressZero } from "../test/fixtures";
@@ -18,6 +14,12 @@ export function handleTransferSingle(event: TransferSingle): void {
   let to = event.params.to.toHex();
   let from = event.params.from.toHex();
   let id = event.params.id.toString();
+
+  let pod = Pod.load(id);
+  if (pod == null) {
+    pod = new Pod(id);
+    pod.save();
+  }
 
   // Create UserPod
   if (to != addressZero) {
@@ -37,27 +39,4 @@ export function handleTransferSingle(event: TransferSingle): void {
     let toUser = new User(to);
     toUser.save();
   }
-}
-
-export function handleCreatePod(event: CreatePod): void {
-  let podId = event.params.podId.toString();
-  let safeAddress = event.params.safe;
-  let admin = event.params.admin;
-  let ensName = event.params.ensName;
-
-  let pod = new Pod(podId);
-  pod.safe = safeAddress;
-  pod.admin = admin;
-  pod.ensName = ensName;
-  pod.save()
-}
-
-export function handleUpdatePodAdmin(event: UpdatePodAdmin): void {
-  let podId = event.params.podId.toString();
-  let admin = event.params.admin;
-  // This should never return a null, because it assumes CreateSafe fires first.
-  // Order is guaranteed according to some guy on The Graph discord.
-  let pod = Pod.load(podId);
-  pod.admin = admin;
-  pod.save();
 }
