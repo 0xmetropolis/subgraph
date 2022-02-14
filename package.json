@@ -4,22 +4,22 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
+    "test": "graph test",
     "prepare:rinkeby": "./scripts/update-rinkeby.sh; mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mainnet": "./scripts/update-mainnet.sh; mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
     "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-1",
     "deploy:mainnet": "npm run prepare:mainnet; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-protocol",
-    "test": "npm run build && ./matchstick MemberToken",
     "create:local": "graph create --node http://localhost:8020/ orca-1",
     "remove:local": "graph remove --node http://localhost:8020/ orca-1",
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 orca-1"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.21.1",
-    "@graphprotocol/graph-ts": "0.20.0",
-    "@orcaprotocol/contracts": "^4.6.0"
+    "@graphprotocol/graph-cli": "0.26.0",
+    "@graphprotocol/graph-ts": "0.24.1",
+    "@orcaprotocol/contracts": "^5.0.0"
   },
   "devDependencies": {
-    "matchstick-as": "0.0.50",
+    "matchstick-as": "^0.3.0",
     "mustache": "^4.2.0"
   }
 }

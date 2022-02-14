@@ -4,14 +4,14 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MemberToken
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0x8DC995523c9c1C6180c50d0CE0733621E63ef8E1"
+      address: "0x0762aA185b6ed2dCA77945Ebe92De705e0C37AE3"
       abi: MemberToken
-      startBlock: 9619573
+      startBlock: 13640406
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - TransferSingle
@@ -22,3 +22,44 @@ dataSources:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
       file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ControllerV1
+    network: mainnet
+    source:
+      address: "0x0762aA185b6ed2dCA77945Ebe92De705e0C37AE3"
+      abi: ControllerV1
+      startBlock: 13640406
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: ControllerV1
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/Controller.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdmin
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: Controller
+    network: mainnet
+    source:
+      address: "0x0762aA185b6ed2dCA77945Ebe92De705e0C37AE3"
+      abi: Controller
+      startBlock: 13640406
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: Controller
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/Controller.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdmin
+      file: ./src/mapping.ts
+      

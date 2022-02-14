@@ -1,11 +1,13 @@
 type User @entity {
   id: ID! # address
   pods: [PodUser!] @derivedFrom(field: "user")
+  adminPods: [String!]! # List of pods that a user is admin of, by ID.
 }
 
 type Pod @entity {
   id: ID! # Pod ID
-  users: [PodUser]! @derivedFrom(field: "pod")
+  users: [PodUser!]! @derivedFrom(field: "pod")
+  admin: String! # Bytes interacts weirdly with the zero address, so we need string.
 }
 
 type PodUser @entity {
