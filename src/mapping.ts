@@ -2,6 +2,9 @@ import {
   TransferSingle,
 } from "../generated/MemberToken/MemberToken"
 import {
+  UpdatePodAdmin as UpdatePodAdminV1_1,
+} from "../generated/ControllerV1_1/ControllerV1_1"
+import {
   UpdatePodAdmin as UpdatePodAdminV1,
 } from "../generated/ControllerV1/ControllerV1"
 import {
@@ -59,7 +62,11 @@ function updatePodAdminLogic(id: string, newAdminAddress: string): void {
   // we need to remove the id from the old admin
   if (pod.admin != addressZero) {
     let oldAdmin = User.load(pod.admin.toString());
-    if (!oldAdmin) return;
+    if (oldAdmin == null) {
+      oldAdmin = new User(pod.admin.toString());
+      oldAdmin.adminPods = new Array<string>();
+      oldAdmin.save();
+    }
     // Filter the working ID from the old admin's list of ids.
     let newAdminPods = new Array<string>();
     for (let i = 0; i < oldAdmin.adminPods.length; i++) {
@@ -77,7 +84,11 @@ function updatePodAdminLogic(id: string, newAdminAddress: string): void {
 
   // Update the new admin's user array.
   let newAdmin = User.load(newAdminAddress);
-  if (!newAdmin) return;
+  if (newAdmin == null) {
+    newAdmin = new User(pod.admin.toString());
+    newAdmin.adminPods = new Array<string>();
+    newAdmin.save();
+  }
   let newAdminPods = newAdmin.adminPods;
   newAdminPods.push(id);
   newAdmin.adminPods = newAdminPods;
@@ -92,6 +103,13 @@ export function handleUpdatePodAdmin(event: UpdatePodAdmin): void {
 }
 
 export function handleUpdatePodAdminV1(event: UpdatePodAdminV1): void {
+  let id = event.params.podId.toString();
+  let newAdminAddress = event.params.admin.toHex();
+
+  updatePodAdminLogic(id, newAdminAddress);
+}
+
+export function handleUpdatePodAdminV1_1(event: UpdatePodAdminV1_1): void {
   let id = event.params.podId.toString();
   let newAdminAddress = event.params.admin.toHex();
 

@@ -11,7 +11,7 @@ dataSources:
       startBlock: {{memberToken.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - TransferSingle
@@ -21,5 +21,65 @@ dataSources:
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ControllerV1_1
+    network: {{network}}
+    source:
+      address: "{{controllerv1_1.address}}"
+      abi: ControllerV1_1
+      startBlock: {{controllerv1_1.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: ControllerV1_1
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.1.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdminV1_1
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ControllerV1
+    network: {{network}}
+    source:
+      address: "{{controllerv1.address}}"
+      abi: ControllerV1
+      startBlock: {{controllerv1.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: ControllerV1
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdminV1
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: Controller
+    network: {{network}}
+    source:
+      address: "{{controller.address}}"
+      abi: Controller
+      startBlock: {{controller.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: Controller
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/Controller.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdmin
       file: ./src/mapping.ts
       

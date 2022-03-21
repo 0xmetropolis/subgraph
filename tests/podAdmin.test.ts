@@ -71,6 +71,21 @@ test('UpdatePodAdmin - admin pods should be empty if admin is removed', () => {
   clearStore();
 });
 
+test('UpdatePodAdmin works if user has not been instantiated', () => {
+  let transferSingleEvent = generateTransferSingle(
+    addressOne,
+    addressZero,
+    addressOne,
+    1,
+    1,
+  );
+  let updatePodAdminEvent = generateUpdatePodAdmin(1, addressTwo);
+
+  handleTransferSingle(transferSingleEvent);
+  handleUpdatePodAdmin(updatePodAdminEvent);
+  assert.fieldEquals('User', addressTwo, 'adminPods', '[1]');
+});
+
 test('UpdatePodAdmin add pod across Controllers', () => {
   let transferSingleEvent1 = generateTransferSingle(
     addressOne,
