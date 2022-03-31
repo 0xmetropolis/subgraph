@@ -64,9 +64,11 @@ This will feed into the `subgraph.template.yaml`, where you need to add a new en
     file: ./src/mapping.ts
 ```
 
-You will also need to add a new event Handler, which you can see in `mapping.ts`.
+Run `npm run codegen`. This will generate the new files required to add a new event handler, which you can see in `mapping.ts`.
 
 ### Deployment
+
+See if you need to add a new contract, as above before doing the below steps.
 
 #### Rinkeby
 

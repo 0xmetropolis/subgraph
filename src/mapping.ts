@@ -2,6 +2,9 @@ import {
   TransferSingle,
 } from "../generated/MemberToken/MemberToken"
 import {
+  UpdatePodAdmin as UpdatePodAdminV1_2,
+} from "../generated/ControllerV1_2/ControllerV1_2"
+import {
   UpdatePodAdmin as UpdatePodAdminV1_1,
 } from "../generated/ControllerV1_1/ControllerV1_1"
 import {
@@ -110,6 +113,13 @@ export function handleUpdatePodAdminV1(event: UpdatePodAdminV1): void {
 }
 
 export function handleUpdatePodAdminV1_1(event: UpdatePodAdminV1_1): void {
+  let id = event.params.podId.toString();
+  let newAdminAddress = event.params.admin.toHex();
+
+  updatePodAdminLogic(id, newAdminAddress);
+}
+
+export function handleUpdatePodAdminV1_2(event: UpdatePodAdminV1_2): void {
   let id = event.params.podId.toString();
   let newAdminAddress = event.params.admin.toHex();
 

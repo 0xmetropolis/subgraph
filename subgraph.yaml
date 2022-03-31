@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MemberToken
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x0762aA185b6ed2dCA77945Ebe92De705e0C37AE3"
+      address: "0x8DC995523c9c1C6180c50d0CE0733621E63ef8E1"
       abi: MemberToken
-      startBlock: 13640406
+      startBlock: 9619574
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -23,12 +23,32 @@ dataSources:
           handler: handleTransferSingle
       file: ./src/mapping.ts
   - kind: ethereum/contract
-    name: ControllerV1_1
-    network: mainnet
+    name: ControllerV1_2
+    network: rinkeby
     source:
-      address: "0x242e1E6cF6C30d36988D8019d0fE2e187325CCEd"
+      address: "0x79f18Ce00f68C2F20B105AC0d54565ad401Cb637"
+      abi: ControllerV1_2
+      startBlock: 10423817
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: ControllerV1_2
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.2.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdminV1_2
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ControllerV1_1
+    network: rinkeby
+    source:
+      address: "0x5bc9beb5b7e359ec95e001536d18f6c908570401"
       abi: ControllerV1_1
-      startBlock: 14360459
+      startBlock: 0x9d2d56
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -44,11 +64,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: ControllerV1
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0xD89AAd5348A34E440E72f5F596De4fA7e291A3e8"
+      address: "0x11e2d4c75b9803fF5d6DA8c30b354B44992E0248"
       abi: ControllerV1
-      startBlock: 14005426
+      startBlock: 9985585
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -64,11 +84,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: Controller
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0xD48AF8e64Cb5848e53F7A0583727a5E5e75dbEbB"
+      address: "0xe804300793bb60F71242A5dE7eca7Cbb844Ae3BA"
       abi: Controller
-      startBlock: 13640492
+      startBlock: 9619575
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

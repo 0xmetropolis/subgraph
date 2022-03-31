@@ -15,5 +15,9 @@
   "controllerv1_1": {
     "address": "0x5bc9beb5b7e359ec95e001536d18f6c908570401",
     "startBlock": "0x9d2d56"
+  },
+  "controllerv1_2": {
+    "address": "0x79f18Ce00f68C2F20B105AC0d54565ad401Cb637",
+    "startBlock": "10423817"
   }
 }

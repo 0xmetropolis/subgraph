@@ -23,6 +23,26 @@ dataSources:
           handler: handleTransferSingle
       file: ./src/mapping.ts
   - kind: ethereum/contract
+    name: ControllerV1_2
+    network: {{network}}
+    source:
+      address: "{{controllerv1_2.address}}"
+      abi: ControllerV1_2
+      startBlock: {{controllerv1_2.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UpdatePodAdmin
+      abis:
+        - name: ControllerV1_2
+          file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.2.json
+      eventHandlers:
+        - event: UpdatePodAdmin(uint256,address)
+          handler: handleUpdatePodAdminV1_2
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
     name: ControllerV1_1
     network: {{network}}
     source:
