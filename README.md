@@ -16,59 +16,18 @@ This subgraph is configured to deploy to both mainnet and rinkeby.
 
 ### Adding New Contracts
 
-If new contracts have been added, for example, a new Controller version, then you'll need to update `./scripts/`, and add a new entry to the `subgraph.template.yaml`
+The `npm run prepare` scripts will handle new Controller versions, the only thing you need to do is update `src/mapping.ts` with a new `handlePodAdmin` function:
 
-If this is unnecessary, you can skip to the deployment process below.
+```js
+export function handleUpdatePodAdmin(event: UpdatePodAdmin): void {
+  let id = event.params.podId.toString();
+  let newAdminAddress = event.params.admin.toHex();
 
-#### Updating ./scripts
-
-Using ControllerV1.1 as an example, you would have to add the following lines to the script:
-
-```sh
-CONTROLLERV1_1_ADDRESS=$(jq -r .address node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.1.json)
-CONTROLLERV1_1_BLOCK=$(jq -r .receipt.blockNumber node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.1.json)
-
-# ...
-
-    --arg CONTROLLERV1_1_ADDRESS "$CONTROLLERV1_1_ADDRESS" \
-    --arg CONTROLLERV1_1_BLOCK "$CONTROLLERV1_1_BLOCK" \
-
-# ...
-
-    | .controllerv1_1.address = $CONTROLLERV1_1_ADDRESS
-    | .controllerv1_1.startBlock = $CONTROLLERV1_1_BLOCK
+  updatePodAdminLogic(id, newAdminAddress);
+}
 ```
 
-This will feed into the `subgraph.template.yaml`, where you need to add a new entry:
-
-```yaml
-- kind: ethereum/contract
-  name: ControllerV1
-  network: { { network } }
-  source:
-    address: "{{controllerv1.address}}"
-    abi: ControllerV1
-    startBlock: { { controllerv1.startBlock } }
-  mapping:
-    kind: ethereum/events
-    apiVersion: 0.0.5
-    language: wasm/assemblyscript
-    entities:
-      - UpdatePodAdmin
-    abis:
-      - name: ControllerV1
-        file: ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/ControllerV1.json
-    eventHandlers:
-      - event: UpdatePodAdmin(uint256,address)
-        handler: handleUpdatePodAdminV1
-    file: ./src/mapping.ts
-```
-
-Run `npm run codegen`. This will generate the new files required to add a new event handler, which you can see in `mapping.ts`.
-
-### Deployment
-
-See if you need to add a new contract, as above before doing the below steps.
+You will need to manually add any new contracts that are not Controller though.
 
 #### Rinkeby
 
