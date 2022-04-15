@@ -5,9 +5,9 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "test": "graph test",
-    "prepare:rinkeby": "./scripts/update-rinkeby.sh; mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:mainnet": "./scripts/update-mainnet.sh; mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
-    "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-1",
+    "prepare:rinkeby": "node ./scripts/fetch-deployments.js rinkeby",
+    "prepare:mainnet": "node ./scripts/fetch-deployments.js mainnet",
+    "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --product hosted-service orca-protocol/pod-members",
     "deploy:mainnet": "npm run prepare:mainnet; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-protocol",
     "create:local": "graph create --node http://localhost:8020/ orca-1",
     "remove:local": "graph remove --node http://localhost:8020/ orca-1",
@@ -16,9 +16,10 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "0.26.0",
     "@graphprotocol/graph-ts": "0.24.1",
-    "@orcaprotocol/contracts": "^5.2.0"
+    "@orcaprotocol/contracts": "^5.2.2"
   },
   "devDependencies": {
+    "js-yaml": "^4.1.0",
     "matchstick-as": "^0.3.0",
     "mustache": "^4.2.0"
   }
