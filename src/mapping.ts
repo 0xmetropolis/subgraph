@@ -2,6 +2,14 @@ import {
   TransferSingle,
 } from "../generated/MemberToken/MemberToken"
 import {
+  UpdatePodAdmin as UpdatePodAdminV1_4,
+  DeregisterPod as DeregisterPodV1_4,
+} from "../generated/ControllerV1_4/ControllerV1_4"
+import {
+  UpdatePodAdmin as UpdatePodAdminV1_3,
+  DeregisterPod as DeregisterPodV1_3,
+} from "../generated/ControllerV1_3/ControllerV1_3"
+import {
   UpdatePodAdmin as UpdatePodAdminV1_2,
 } from "../generated/ControllerV1_2/ControllerV1_2"
 import {
@@ -54,6 +62,48 @@ export function handleTransferSingle(event: TransferSingle): void {
   if (from != addressZero) {
     store.remove('PodUser', from + '-' + id);
   }
+}
+
+function deregisterPodLogic(id: string): void {
+  let pod = Pod.load(id);
+
+  // This shouldn't happen, but required for typecheck.
+  if (pod == null) {
+    return;
+  }
+
+  // Delete the admin role from the admin
+  if (pod.admin != addressZero) {
+    let oldAdmin = User.load(pod.admin.toString());
+    // In case the old admin doesn't exist
+    if (oldAdmin == null) {
+      oldAdmin = new User(pod.admin.toString());
+      oldAdmin.adminPods = new Array<string>();
+      oldAdmin.save();
+    }
+    // Filter the working ID from the old admin's list of ids.
+    let newAdminPods = new Array<string>();
+    for (let i = 0; i < oldAdmin.adminPods.length; i++) {
+      if (oldAdmin.adminPods[i] != id) {
+        newAdminPods.push(oldAdmin.adminPods[i]);
+      }
+    }
+    oldAdmin.adminPods = newAdminPods;
+    oldAdmin.save();
+  }
+
+  // Delete the Pod
+  store.remove('Pod', id);
+}
+
+export function handleDeregisterPodV1_3(event: DeregisterPodV1_3): void {
+  let id = event.params.podId.toString();
+  deregisterPodLogic(id);
+}
+
+export function handleDeregisterPodV1_4(event: DeregisterPodV1_4): void {
+  let id = event.params.podId.toString();
+  deregisterPodLogic(id);
 }
 
 function updatePodAdminLogic(id: string, newAdminAddress: string): void {
@@ -120,6 +170,20 @@ export function handleUpdatePodAdminV1_1(event: UpdatePodAdminV1_1): void {
 }
 
 export function handleUpdatePodAdminV1_2(event: UpdatePodAdminV1_2): void {
+  let id = event.params.podId.toString();
+  let newAdminAddress = event.params.admin.toHex();
+
+  updatePodAdminLogic(id, newAdminAddress);
+}
+
+export function handleUpdatePodAdminV1_3(event: UpdatePodAdminV1_3): void {
+  let id = event.params.podId.toString();
+  let newAdminAddress = event.params.admin.toHex();
+
+  updatePodAdminLogic(id, newAdminAddress);
+}
+
+export function handleUpdatePodAdminV1_4(event: UpdatePodAdminV1_3): void {
   let id = event.params.podId.toString();
   let newAdminAddress = event.params.admin.toHex();
 

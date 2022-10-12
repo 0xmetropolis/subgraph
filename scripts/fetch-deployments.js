@@ -78,6 +78,13 @@ async function main() {
           file: "./src/mapping.ts",
         },
       };
+      // TODO: Need actual version checks.
+      console.log("version", version);
+      if (version === "V1_3" || version === "V1_4")
+        controllerTemplate.mapping.eventHandlers.push({
+          event: "DeregisterPod(uint256)",
+          handler: `handleDeregisterPod${version}`,
+        });
       template.dataSources.push(controllerTemplate);
     })
   );

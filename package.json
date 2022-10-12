@@ -5,18 +5,19 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "test": "graph test",
+    "auth": "graph auth",
     "prepare:rinkeby": "node ./scripts/fetch-deployments.js rinkeby",
     "prepare:mainnet": "node ./scripts/fetch-deployments.js mainnet",
-    "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --product hosted-service orca-protocol/pod-members",
+    "deploy:rinkeby": "npm run prepare:rinkeby; graph deploy --product hosted-service orcaprotocol/pod-members",
     "deploy:mainnet": "npm run prepare:mainnet; graph deploy --node https://api.studio.thegraph.com/deploy/ orca-protocol",
     "create:local": "graph create --node http://localhost:8020/ orca-1",
     "remove:local": "graph remove --node http://localhost:8020/ orca-1",
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 orca-1"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.26.0",
-    "@graphprotocol/graph-ts": "0.24.1",
-    "@orcaprotocol/contracts": "^5.2.2"
+    "@graphprotocol/graph-cli": "^0.32.0",
+    "@graphprotocol/graph-ts": "^0.27.0",
+    "@orcaprotocol/contracts": "^5.9.0"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",
