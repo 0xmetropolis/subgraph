@@ -7,6 +7,7 @@ import {
 import { 
   UpdatePodAdmin as UpdatePodAdminV1,
 } from '../generated/ControllerV1/ControllerV1';
+import { DeregisterPod } from '../generated/ControllerV1_3/ControllerV1_3';
 
 // Generates events for test purposes
 
@@ -80,4 +81,21 @@ export function generateUpdatePodAdminV1(podId: i32, admin: string): UpdatePodAd
   UpdatePodAdminEvent.parameters.push(AddressParam('admin', admin));
 
   return UpdatePodAdminEvent;
+}
+
+export function generateDeregisterPod(podId: i32): DeregisterPod {
+  let mockEvent = newMockEvent();
+  let DeregisterPodEvent = new DeregisterPod(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters
+  );
+
+  DeregisterPodEvent.parameters.push(I32Param('podId', podId));
+
+  return DeregisterPodEvent;
 }

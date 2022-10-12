@@ -16,7 +16,11 @@ This subgraph is configured to deploy to both mainnet and rinkeby.
 
 ### Adding New Contracts
 
-The `npm run prepare` scripts will handle new Controller versions, the only thing you need to do is update `src/mapping.ts` with a new `handlePodAdmin` function:
+Install the updated Contracts package
+
+Run `npm run codegen`
+
+The `npm run prepare` scripts will handle new Controller versions, the only thing you need to do is update `src/mapping.ts` with a new `handlePodAdmin` function and `deregisterPod`:
 
 ```js
 export function handleUpdatePodAdmin(event: UpdatePodAdmin): void {
@@ -25,6 +29,22 @@ export function handleUpdatePodAdmin(event: UpdatePodAdmin): void {
 
   updatePodAdminLogic(id, newAdminAddress);
 }
+
+export function handleDeregisterPodV1_4(event: DeregisterPodV1_4): void {
+  let id = event.params.podId.toString();
+  deregisterPodLogic(id);
+}
+```
+
+DEV NOTE: Ugh, for now we have to manually modify the version check in the eventGenerator function, i.e.,
+
+```js
+// TODO: Need actual version checks.
+if (version === "1.3")
+  controllerTemplate.eventHandlers.push({
+    event: "DeregisterPod(uint256)",
+    handler: `handleDeregisterPod`,
+  });
 ```
 
 You will need to manually add any new contracts that are not Controller though.
