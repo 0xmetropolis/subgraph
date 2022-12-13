@@ -1,26 +1,19 @@
 import {
   TransferSingle,
-} from "../generated/MemberToken/MemberToken"
+  TransferBatch,
+} from "../generated/MemberToken/MemberToken";
 import {
   UpdatePodAdmin as UpdatePodAdminV1_4,
   DeregisterPod as DeregisterPodV1_4,
-} from "../generated/ControllerV1_4/ControllerV1_4"
+} from "../generated/ControllerV1_4/ControllerV1_4";
 import {
   UpdatePodAdmin as UpdatePodAdminV1_3,
   DeregisterPod as DeregisterPodV1_3,
-} from "../generated/ControllerV1_3/ControllerV1_3"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1_2,
-} from "../generated/ControllerV1_2/ControllerV1_2"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1_1,
-} from "../generated/ControllerV1_1/ControllerV1_1"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1,
-} from "../generated/ControllerV1/ControllerV1"
-import {
-  UpdatePodAdmin,
-} from "../generated/Controller/Controller"
+} from "../generated/ControllerV1_3/ControllerV1_3";
+import { UpdatePodAdmin as UpdatePodAdminV1_2 } from "../generated/ControllerV1_2/ControllerV1_2";
+import { UpdatePodAdmin as UpdatePodAdminV1_1 } from "../generated/ControllerV1_1/ControllerV1_1";
+import { UpdatePodAdmin as UpdatePodAdminV1 } from "../generated/ControllerV1/ControllerV1";
+import { UpdatePodAdmin } from "../generated/Controller/Controller";
 import { User, Pod, PodUser } from "../generated/schema";
 import { store } from "@graphprotocol/graph-ts";
 import { addressZero } from "../tests/fixtures";
