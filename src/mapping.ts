@@ -36,7 +36,7 @@ export function handleTransferSingle(event: TransferSingle): void {
 
   // Create UserPod, unless this is a burn
   if (to != addressZero) {
-    let podUser = new PodUser(to + '-' + id);
+    let podUser = new PodUser(to + "-" + id);
     podUser.user = to;
     podUser.pod = id;
     podUser.save();
@@ -53,7 +53,51 @@ export function handleTransferSingle(event: TransferSingle): void {
 
   // Remove UserPod, unless this is a mint.
   if (from != addressZero) {
-    store.remove('PodUser', from + '-' + id);
+    store.remove("PodUser", from + "-" + id);
+  }
+}
+
+/**
+ * @method handleTransferBatch
+ * @param event TransferBatch
+ * @description Handles TransferBatch events from the MemberToken contract.
+ */
+export function handleTransferBatch(event: TransferBatch): void {
+  let to = event.params.to.toHex();
+  let from = event.params.from.toHex();
+
+  // loop through ids in event.params.ids
+  for (let i = 0; i < event.params.ids.length; i++) {
+    let id = event.params.ids[i].toString();
+
+    let pod = Pod.load(id);
+    if (pod == null) {
+      pod = new Pod(id);
+      pod.admin = addressZero;
+      pod.save();
+    }
+
+    // Create UserPod, unless this is a burn
+    if (to != addressZero) {
+      let podUser = new PodUser(to + "-" + id);
+      podUser.user = to;
+      podUser.pod = id;
+      podUser.save();
+
+      // Create toUser, if one does not exist.
+      let toUser = User.load(to);
+      if (toUser == null) {
+        // Otherwise instantiate new user.
+        toUser = new User(to);
+        toUser.adminPods = new Array<string>();
+        toUser.save();
+      }
+    }
+
+    // Remove UserPod, unless this is a mint.
+    if (from != addressZero) {
+      store.remove("PodUser", from + "-" + id);
+    }
   }
 }
 
@@ -86,7 +130,7 @@ function deregisterPodLogic(id: string): void {
   }
 
   // Delete the Pod
-  store.remove('Pod', id);
+  store.remove("Pod", id);
 }
 
 export function handleDeregisterPodV1_3(event: DeregisterPodV1_3): void {
@@ -103,7 +147,7 @@ function updatePodAdminLogic(id: string, newAdminAddress: string): void {
   // Pod should exist since the tokens are minted first.
   let pod = Pod.load(id);
   if (pod == null) return; // Shouldn't happen, but required for type check.
-  
+
   // If an pod.admin exists, i.e., not addressZero,
   // we need to remove the id from the old admin
   if (pod.admin != addressZero) {

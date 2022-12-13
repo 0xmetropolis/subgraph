@@ -6,7 +6,8 @@ import {
 } from "../generated/MemberToken/MemberToken";
 import { UpdatePodAdmin } from "../generated/Controller/Controller";
 import { UpdatePodAdmin as UpdatePodAdminV1 } from "../generated/ControllerV1/ControllerV1";
-import { DeregisterPod } from "../generated/ControllerV1_3/ControllerV1_3";
+import { DeregisterPod as DeregisterPodV1_3 } from "../generated/ControllerV1_4/ControllerV1_4";
+import { DeregisterPod as DeregisterPodV1_4 } from "../generated/ControllerV1_4/ControllerV1_4";
 
 // Generates events for test purposes
 
@@ -14,6 +15,14 @@ function AddressParam(label: string, address: string): ethereum.EventParam {
   let param = new ethereum.EventParam(
     label,
     ethereum.Value.fromAddress(Address.fromString(address))
+  );
+  return param;
+}
+
+function I32ArrayParam(label: string, input: Array<i32>): ethereum.EventParam {
+  let param = new ethereum.EventParam(
+    label,
+    ethereum.Value.fromI32Array(input)
   );
   return param;
 }
@@ -62,8 +71,8 @@ export function generateTransferBatch(
   from: string,
   to: string,
   ids: i32[],
-  value: i32
-): TransferSingle {
+  values: i32[]
+): TransferBatch {
   let mockEvent = newMockEvent();
   let TransferBatchEvent = new TransferBatch(
     mockEvent.address,
@@ -79,8 +88,8 @@ export function generateTransferBatch(
   TransferBatchEvent.parameters.push(AddressParam("operator", operator));
   TransferBatchEvent.parameters.push(AddressParam("from", from));
   TransferBatchEvent.parameters.push(AddressParam("to", to));
-  TransferBatchEvent.parameters.push(I32Param("ids", ids));
-  TransferBatchEvent.parameters.push(I32Param("value", value));
+  TransferBatchEvent.parameters.push(I32ArrayParam("ids", ids));
+  TransferBatchEvent.parameters.push(I32ArrayParam("value", values));
 
   return TransferBatchEvent;
 }
@@ -129,9 +138,27 @@ export function generateUpdatePodAdminV1(
   return UpdatePodAdminEvent;
 }
 
-export function generateDeregisterPod(podId: i32): DeregisterPod {
+export function generateDeregisterPodV1_3(podId: i32): DeregisterPodV1_3 {
   let mockEvent = newMockEvent();
-  let DeregisterPodEvent = new DeregisterPod(
+  let DeregisterPodEvent = new DeregisterPodV1_3(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  DeregisterPodEvent.parameters.push(I32Param("podId", podId));
+
+  return DeregisterPodEvent;
+}
+
+export function generateDeregisterPodV1_4(podId: i32): DeregisterPodV1_4 {
+  let mockEvent = newMockEvent();
+  let DeregisterPodEvent = new DeregisterPodV1_4(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
