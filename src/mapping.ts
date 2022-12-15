@@ -158,6 +158,7 @@ function deregisterPodLogic(id: string): void {
         }
       }
       user.pods = newPods;
+      user.save();
 
       // Delete the PodUser
       store.remove("PodUser", pod.users[i].toString());
