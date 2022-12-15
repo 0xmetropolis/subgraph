@@ -271,8 +271,9 @@ describe("DeregisterPod", () => {
     let deregisterPodEvent = generateDeregisterPodV1_4(1);
     handleDeregisterPod(deregisterPodEvent);
 
-    assert.notInStore("PodUser", addressOne + "-119");
+    assert.notInStore("Pod", "1");
     assert.notInStore("PodUser", addressOne + "-1");
+    assert.fieldEquals("Pod", "2", "id", "2");
     assert.fieldEquals("PodUser", addressOne + "-2", "user", addressOne);
 
     clearStore();
