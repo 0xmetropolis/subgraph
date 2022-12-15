@@ -248,9 +248,33 @@ describe("DeregisterPod", () => {
     assert.notInStore("Pod", "119");
     assert.notInStore("PodUser", addressOne + "-119");
 
-    // User should remain untouched
     assert.fieldEquals("User", addressOne, "id", addressOne);
     assert.fieldEquals("User", addressOne, "adminPods", "[]");
+
+    clearStore();
+  });
+
+  test("DeregisterPod should only delete that one pod for a user in many", () => {
+    // Create a pod
+    let transferBatchEvent = generateTransferBatch(
+      addressOne,
+      addressZero,
+      addressOne,
+      [1, 2],
+      [1, 1]
+    );
+    handleTransferBatch(transferBatchEvent);
+
+    assert.fieldEquals("User", addressOne, "id", addressOne);
+    assert.fieldEquals("PodUser", addressOne + "-1", "user", addressOne);
+    assert.fieldEquals("PodUser", addressOne + "-2", "user", addressOne);
+
+    let deregisterPodEvent = generateDeregisterPodV1_4(1);
+    handleDeregisterPod(deregisterPodEvent);
+
+    assert.notInStore("PodUser", addressOne + "-119");
+    assert.notInStore("PodUser", addressOne + "-1");
+    assert.fieldEquals("PodUser", addressOne + "-2", "user", addressOne);
 
     clearStore();
   });
