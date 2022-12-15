@@ -4,12 +4,9 @@ import {
 } from "../generated/MemberToken/MemberToken";
 import {
   UpdatePodAdmin as UpdatePodAdminV1_4,
-  DeregisterPod as DeregisterPodV1_4,
+  DeregisterPod, // This event is the same in every version
 } from "../generated/ControllerV1_4/ControllerV1_4";
-import {
-  UpdatePodAdmin as UpdatePodAdminV1_3,
-  DeregisterPod as DeregisterPodV1_3,
-} from "../generated/ControllerV1_3/ControllerV1_3";
+import { UpdatePodAdmin as UpdatePodAdminV1_3 } from "../generated/ControllerV1_3/ControllerV1_3";
 import { UpdatePodAdmin as UpdatePodAdminV1_2 } from "../generated/ControllerV1_2/ControllerV1_2";
 import { UpdatePodAdmin as UpdatePodAdminV1_1 } from "../generated/ControllerV1_1/ControllerV1_1";
 import { UpdatePodAdmin as UpdatePodAdminV1 } from "../generated/ControllerV1/ControllerV1";
@@ -129,16 +126,19 @@ function deregisterPodLogic(id: string): void {
     oldAdmin.save();
   }
 
-  // Delete the Pod
+  // Delete the PodUsers for this Pod
+  if (pod.users.length > 0) {
+    for (let i = 0; i < pod.users.length; i++) {
+      // Delete the PodUser
+      store.remove("PodUser", pod.users[i].toString());
+    }
+  }
+
+  // Delete the Pod itself
   store.remove("Pod", id);
 }
 
-export function handleDeregisterPodV1_3(event: DeregisterPodV1_3): void {
-  let id = event.params.podId.toString();
-  deregisterPodLogic(id);
-}
-
-export function handleDeregisterPodV1_4(event: DeregisterPodV1_4): void {
+export function handleDeregisterPod(event: DeregisterPod): void {
   let id = event.params.podId.toString();
   deregisterPodLogic(id);
 }

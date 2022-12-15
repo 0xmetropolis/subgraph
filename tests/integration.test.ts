@@ -7,12 +7,10 @@ import {
 import {
   handleTransferSingle,
   handleUpdatePodAdminV1_4,
-  handleDeregisterPodV1_3,
-  handleDeregisterPodV1_4,
+  handleDeregisterPod,
   handleTransferBatch,
 } from "../src/mapping";
 import {
-  generateDeregisterPodV1_3,
   generateDeregisterPodV1_4,
   generateTransferSingle,
   generateTransferBatch,
@@ -238,21 +236,23 @@ describe("DeregisterPod", () => {
     handleTransferSingle(transferSingleEvent);
 
     assert.fieldEquals("Pod", "119", "id", "119");
-    // Admin should always be null for a fresh pod on creation.
+    assert.fieldEquals("User", addressOne, "adminPods", "[]");
     // Updating should be handled by UpdatePodAdmin, not this function.
     assert.fieldEquals("User", addressOne, "id", addressOne);
     assert.fieldEquals("PodUser", addressOne + "-119", "user", addressOne);
     assert.fieldEquals("PodUser", addressOne + "-119", "pod", "119");
 
     let deregisterPodEvent = generateDeregisterPodV1_4(119);
-    handleDeregisterPodV1_4(deregisterPodEvent);
+    handleDeregisterPod(deregisterPodEvent);
 
     // Pod and PodUser should be deleted
     assert.notInStore("Pod", "119");
     assert.notInStore("PodUser", addressOne + "-119");
+
     // User should remain untouched
     assert.fieldEquals("User", addressOne, "id", addressOne);
     assert.fieldEquals("User", addressOne, "adminPods", "[]");
+
     clearStore();
   });
 });
