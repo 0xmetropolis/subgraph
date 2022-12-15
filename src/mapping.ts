@@ -38,8 +38,8 @@ export function handleTransferSingle(event: TransferSingle): void {
     podUser.pod = id;
     podUser.save();
 
-    // Create toUser, if one does not exist.
     let toUser = User.load(to);
+    // Create toUser, if one does not exist.
     if (toUser == null) {
       // Otherwise instantiate new user.
       toUser = new User(to);
@@ -81,8 +81,8 @@ export function handleTransferBatch(event: TransferBatch): void {
       podUser.pod = id;
       podUser.save();
 
-      // Create toUser, if one does not exist.
       let toUser = User.load(to);
+      // Create toUser, if one does not exist.
       if (toUser == null) {
         // Otherwise instantiate new user.
         toUser = new User(to);
@@ -129,37 +129,6 @@ function deregisterPodLogic(id: string): void {
   // Delete the PodUsers for this Pod
   if (pod.users.length > 0) {
     for (let i = 0; i < pod.users.length; i++) {
-      // Find the user
-      let podUserId = pod.users[i].toString();
-
-      // Ex: "0x1...-123" -> "0x1..."
-      let userId = podUserId.substring(0, id.length + 1);
-      let user = User.load(userId);
-
-      // For typecheck
-      if (user == null) {
-        user = new User(userId);
-        user.pods = new Array<string>();
-        user.adminPods = new Array<string>();
-        user.save();
-      }
-
-      // For typecheck
-      let oldPods = new Array<string>();
-      if (user.pods != null) {
-        oldPods = user.pods as Array<string>;
-      }
-
-      // Filter the PodUser ID from the user's pod array
-      let newPods = new Array<string>();
-      for (let i = 0; i < oldPods.length; i++) {
-        if (oldPods[i] != id) {
-          newPods.push(oldPods[i]);
-        }
-      }
-      user.pods = newPods;
-      user.save();
-
       // Delete the PodUser
       store.remove("PodUser", pod.users[i].toString());
     }

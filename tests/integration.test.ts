@@ -220,7 +220,6 @@ describe("TransferBatch", () => {
     clearStore();
   });
 });
-//TODO test deregisterevent for different controllers
 // abstract handleDeregisterPod and take a version number
 
 describe("DeregisterPod", () => {
