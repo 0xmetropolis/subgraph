@@ -220,7 +220,6 @@ describe("TransferBatch", () => {
     clearStore();
   });
 });
-// abstract handleDeregisterPod and take a version number
 
 describe("DeregisterPod", () => {
   test("DeregisterPod should delete the pod entity", () => {
