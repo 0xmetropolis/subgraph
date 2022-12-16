@@ -5,14 +5,18 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/rinkeby/MemberToken.json
           name: MemberToken
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - TransferSingle
+        - TransferBatch
       eventHandlers:
         - event: >-
             TransferSingle(indexed address,indexed address,indexed
             address,uint256,uint256)
           handler: handleTransferSingle
+        - event: >-
+            TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
       file: ./src/mapping.ts
       kind: ethereum/events
       language: wasm/assemblyscript
@@ -20,7 +24,7 @@ dataSources:
     network: mainnet
     source:
       abi: MemberToken
-      address: '0x0762aA185b6ed2dCA77945Ebe92De705e0C37AE3'
+      address: "0x0762aA185b6ed2dCA77945Ebe92De705e0C37AE3"
       startBlock: 13640406
   - kind: ethereum/contract
     mapping:
@@ -28,7 +32,7 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/mainnet/Controller.json
           name: Controller
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - UpdatePodAdmin
       eventHandlers:
@@ -41,7 +45,7 @@ dataSources:
     network: mainnet
     source:
       abi: Controller
-      address: '0xD48AF8e64Cb5848e53F7A0583727a5E5e75dbEbB'
+      address: "0xD48AF8e64Cb5848e53F7A0583727a5E5e75dbEbB"
       startBlock: 13640492
   - kind: ethereum/contract
     mapping:
@@ -49,7 +53,7 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/mainnet/ControllerV1.1.json
           name: ControllerV1_1
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - UpdatePodAdmin
       eventHandlers:
@@ -62,7 +66,7 @@ dataSources:
     network: mainnet
     source:
       abi: ControllerV1_1
-      address: '0x242e1E6cF6C30d36988D8019d0fE2e187325CCEd'
+      address: "0x242e1E6cF6C30d36988D8019d0fE2e187325CCEd"
       startBlock: 14360459
   - kind: ethereum/contract
     mapping:
@@ -70,7 +74,7 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/mainnet/ControllerV1.4.json
           name: ControllerV1_4
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - UpdatePodAdmin
       eventHandlers:
@@ -85,7 +89,7 @@ dataSources:
     network: mainnet
     source:
       abi: ControllerV1_4
-      address: '0x4C98aF741e352C6551BfF9509b3f8ca9Dd4E6397'
+      address: "0x4C98aF741e352C6551BfF9509b3f8ca9Dd4E6397"
       startBlock: 15360683
   - kind: ethereum/contract
     mapping:
@@ -93,7 +97,7 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/mainnet/ControllerV1.2.json
           name: ControllerV1_2
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - UpdatePodAdmin
       eventHandlers:
@@ -106,7 +110,7 @@ dataSources:
     network: mainnet
     source:
       abi: ControllerV1_2
-      address: '0x17FDC2Eaf2bd46f3e1052CCbccD9e6AD0296C42c'
+      address: "0x17FDC2Eaf2bd46f3e1052CCbccD9e6AD0296C42c"
       startBlock: 14495467
   - kind: ethereum/contract
     mapping:
@@ -114,7 +118,7 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/mainnet/ControllerV1.json
           name: ControllerV1
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - UpdatePodAdmin
       eventHandlers:
@@ -127,7 +131,7 @@ dataSources:
     network: mainnet
     source:
       abi: ControllerV1
-      address: '0xD89AAd5348A34E440E72f5F596De4fA7e291A3e8'
+      address: "0xD89AAd5348A34E440E72f5F596De4fA7e291A3e8"
       startBlock: 14005426
   - kind: ethereum/contract
     mapping:
@@ -135,7 +139,7 @@ dataSources:
         - file: >-
             ./node_modules/@orcaprotocol/contracts/deployments/mainnet/ControllerV1.3.json
           name: ControllerV1_3
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       entities:
         - UpdatePodAdmin
       eventHandlers:
@@ -150,7 +154,7 @@ dataSources:
     network: mainnet
     source:
       abi: ControllerV1_3
-      address: '0xDE69E7C2184599093a9E0Bbc5923fa462fdf0302'
+      address: "0xDE69E7C2184599093a9E0Bbc5923fa462fdf0302"
       startBlock: 15122632
 schema:
   file: ./schema.graphql

@@ -1,26 +1,16 @@
 import {
   TransferSingle,
-} from "../generated/MemberToken/MemberToken"
+  TransferBatch,
+} from "../generated/MemberToken/MemberToken";
 import {
   UpdatePodAdmin as UpdatePodAdminV1_4,
-  DeregisterPod as DeregisterPodV1_4,
-} from "../generated/ControllerV1_4/ControllerV1_4"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1_3,
-  DeregisterPod as DeregisterPodV1_3,
-} from "../generated/ControllerV1_3/ControllerV1_3"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1_2,
-} from "../generated/ControllerV1_2/ControllerV1_2"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1_1,
-} from "../generated/ControllerV1_1/ControllerV1_1"
-import {
-  UpdatePodAdmin as UpdatePodAdminV1,
-} from "../generated/ControllerV1/ControllerV1"
-import {
-  UpdatePodAdmin,
-} from "../generated/Controller/Controller"
+  DeregisterPod, // This event is the same in every version
+} from "../generated/ControllerV1_4/ControllerV1_4";
+import { UpdatePodAdmin as UpdatePodAdminV1_3 } from "../generated/ControllerV1_3/ControllerV1_3";
+import { UpdatePodAdmin as UpdatePodAdminV1_2 } from "../generated/ControllerV1_2/ControllerV1_2";
+import { UpdatePodAdmin as UpdatePodAdminV1_1 } from "../generated/ControllerV1_1/ControllerV1_1";
+import { UpdatePodAdmin as UpdatePodAdminV1 } from "../generated/ControllerV1/ControllerV1";
+import { UpdatePodAdmin } from "../generated/Controller/Controller";
 import { User, Pod, PodUser } from "../generated/schema";
 import { store } from "@graphprotocol/graph-ts";
 import { addressZero } from "../tests/fixtures";
@@ -43,13 +33,13 @@ export function handleTransferSingle(event: TransferSingle): void {
 
   // Create UserPod, unless this is a burn
   if (to != addressZero) {
-    let podUser = new PodUser(to + '-' + id);
+    let podUser = new PodUser(to + "-" + id);
     podUser.user = to;
     podUser.pod = id;
     podUser.save();
 
-    // Create toUser, if one does not exist.
     let toUser = User.load(to);
+    // Create toUser, if one does not exist.
     if (toUser == null) {
       // Otherwise instantiate new user.
       toUser = new User(to);
@@ -60,7 +50,51 @@ export function handleTransferSingle(event: TransferSingle): void {
 
   // Remove UserPod, unless this is a mint.
   if (from != addressZero) {
-    store.remove('PodUser', from + '-' + id);
+    store.remove("PodUser", from + "-" + id);
+  }
+}
+
+/**
+ * @method handleTransferBatch
+ * @param event TransferBatch
+ * @description Handles TransferBatch events from the MemberToken contract.
+ */
+export function handleTransferBatch(event: TransferBatch): void {
+  let to = event.params.to.toHex();
+  let from = event.params.from.toHex();
+
+  // loop through ids in event.params.ids
+  for (let i = 0; i < event.params.ids.length; i++) {
+    let id = event.params.ids[i].toString();
+
+    let pod = Pod.load(id);
+    if (pod == null) {
+      pod = new Pod(id);
+      pod.admin = addressZero;
+      pod.save();
+    }
+
+    // Create UserPod, unless this is a burn
+    if (to != addressZero) {
+      let podUser = new PodUser(to + "-" + id);
+      podUser.user = to;
+      podUser.pod = id;
+      podUser.save();
+
+      let toUser = User.load(to);
+      // Create toUser, if one does not exist.
+      if (toUser == null) {
+        // Otherwise instantiate new user.
+        toUser = new User(to);
+        toUser.adminPods = new Array<string>();
+        toUser.save();
+      }
+    }
+
+    // Remove UserPod, unless this is a mint.
+    if (from != addressZero) {
+      store.remove("PodUser", from + "-" + id);
+    }
   }
 }
 
@@ -92,16 +126,19 @@ function deregisterPodLogic(id: string): void {
     oldAdmin.save();
   }
 
-  // Delete the Pod
-  store.remove('Pod', id);
+  // Delete the PodUsers for this Pod
+  if (pod.users.length > 0) {
+    for (let i = 0; i < pod.users.length; i++) {
+      // Delete the PodUser
+      store.remove("PodUser", pod.users[i].toString());
+    }
+  }
+
+  // Delete the Pod itself
+  store.remove("Pod", id);
 }
 
-export function handleDeregisterPodV1_3(event: DeregisterPodV1_3): void {
-  let id = event.params.podId.toString();
-  deregisterPodLogic(id);
-}
-
-export function handleDeregisterPodV1_4(event: DeregisterPodV1_4): void {
+export function handleDeregisterPod(event: DeregisterPod): void {
   let id = event.params.podId.toString();
   deregisterPodLogic(id);
 }
@@ -110,7 +147,7 @@ function updatePodAdminLogic(id: string, newAdminAddress: string): void {
   // Pod should exist since the tokens are minted first.
   let pod = Pod.load(id);
   if (pod == null) return; // Shouldn't happen, but required for type check.
-  
+
   // If an pod.admin exists, i.e., not addressZero,
   // we need to remove the id from the old admin
   if (pod.admin != addressZero) {

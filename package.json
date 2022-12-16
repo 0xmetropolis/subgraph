@@ -15,13 +15,13 @@
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 orca-1"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.32.0",
+    "@graphprotocol/graph-cli": "^0.36.0",
     "@graphprotocol/graph-ts": "^0.27.0",
     "@orcaprotocol/contracts": "^5.9.0"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",
-    "matchstick-as": "^0.3.0",
+    "matchstick-as": "^0.5.0",
     "mustache": "^4.2.0"
   }
 }
